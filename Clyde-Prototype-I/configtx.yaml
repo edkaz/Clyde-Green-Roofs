@@ -1,0 +1,131 @@
+#---------------------- SECTION: Organizations --------------------------------
+#
+Organizations:
+
+    - &Clyde-Hotel
+        Name:   Clyde-Orderer
+        ID:     Clyde-MSP
+        MSPDir: crypto-config/ordererOrganizations/clyde.com.au/msp
+
+    - &Producer
+        Name:   Producer
+        ID:     Producer-MSP
+        MSPDir: crypto-config/peerOrganizations/producer.com.au/msp
+        AnchorPeers:
+            - Host: peer0.producer.com.au
+              Port: 7051
+    - &Consumer
+        Name:   Consumer
+        ID:     Consumer-MSP
+        MSPDir: crypto-config/peerOrganizations/consumer.com.au/msp
+        AnchorPeers:
+            - Host: peer0.consumer.com.au
+              Port: 7051
+#---------------------- SECTION: Applications--- --------------------------------
+#
+Application: &ApplicationDefaults
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the application side of the network
+    Organizations:
+
+#---------------------- SECTION: Orderers-----------------------------------------
+#
+Orderer: &Clyde-Defaults
+
+    # Orderer Type: The orderer implementation to start
+    # Available types are "solo" and "kafka"
+    OrdererType: solo
+
+    Addresses:
+        - clyde-orderer.clyde.com.au:7050
+
+    # Batch Timeout: The amount of time to wait before creating a batch
+    BatchTimeout: 2s
+
+    # Batch Size: Controls the number of messages batched into a block
+    BatchSize:
+
+        # Max Message Count: The maximum number of messages to permit in a batch
+        MaxMessageCount: 10
+
+        # Absolute Max Bytes: The absolute maximum number of bytes allowed for
+        # the serialized messages in a batch.
+        AbsoluteMaxBytes: 99 MB
+
+        # Preferred Max Bytes: The preferred maximum number of bytes allowed for
+        # the serialized messages in a batch. A message larger than the preferred
+        # max bytes will result in a batch larger than preferred max bytes.
+        PreferredMaxBytes: 512 KB
+
+    Kafka:
+        # Brokers: A list of Kafka brokers to which the orderer connects
+        # NOTE: Use IP:port notation
+        Brokers:
+            - 127.0.0.1:9092
+            - 127.0.0.1:9093
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the orderer side of the network
+    Organizations:
+
+Orderer: &CCP-Defaults
+
+    # Orderer Type: The orderer implementation to start
+    # Available types are "solo" and "kafka"
+    OrdererType: solo
+
+    Addresses:
+        - clyde-orderer.clyde.com.au:7050
+
+    # Batch Timeout: The amount of time to wait before creating a batch
+    BatchTimeout: 2s
+
+    # Batch Size: Controls the number of messages batched into a block
+    BatchSize:
+
+        # Max Message Count: The maximum number of messages to permit in a batch
+        MaxMessageCount: 10
+
+        # Absolute Max Bytes: The absolute maximum number of bytes allowed for
+        # the serialized messages in a batch.
+        AbsoluteMaxBytes: 99 MB
+
+        # Preferred Max Bytes: The preferred maximum number of bytes allowed for
+        # the serialized messages in a batch. A message larger than the preferred
+        # max bytes will result in a batch larger than preferred max bytes.
+        PreferredMaxBytes: 512 KB
+
+    Kafka:
+        # Brokers: A list of Kafka brokers to which the orderer connects
+        # NOTE: Use IP:port notation
+        Brokers:
+            - 127.0.0.1:9092
+            - 127.0.0.1:9093
+
+    # Organizations is the list of orgs which are defined as participants on
+    # the orderer side of the network
+    Organizations:
+
+#---------------------- SECTION: Profiles -------------------------------------------
+#
+Profiles:
+
+    Clyde-Hotel-Profile:
+        Orderer:
+            <<: *Clyde-Defaults
+            <<: *CCP-Defaults
+            Organizations:
+                - *Clyde-Hotel
+        Consortiums:
+            Clyde-Consortium:
+                Organizations:
+                    - *Producer
+                    - *Consumer
+    Clyde-Channel:
+        Consortium: Clyde-Consortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Producer
+                - *Consumer

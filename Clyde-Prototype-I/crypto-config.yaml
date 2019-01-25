@@ -1,0 +1,31 @@
+OrdererOrgs:
+  
+  - Name: Clyde-Orderer
+    Domain: clyde.com.au
+    Specs:
+      - Hostname: clyde-orderer
+
+  - Name: CCP-Orderer
+    Domain: ccp.com.au
+    Specs:
+      - Hostname: ccp-orderer
+
+PeerOrgs:
+
+  - Name: Consumer
+    Domain: consumer.com.au
+    Specs:
+      - Hostname: clyde
+    Template:
+      Count: 2
+    Users:
+      Count: 1
+
+  - Name: Producer
+    Domain: producer.com.au
+    Specs:
+      - Hostname: ccp
+    Template:
+      Count: 2
+    Users:
+      Count: 1
