@@ -1,0 +1,1 @@
+fabric_ca_client = new Fabric_CA_Client('http://168.1.149.87:30054/', tlsOptions , 'Clyde-Certificate-Authority', crypto_suite);

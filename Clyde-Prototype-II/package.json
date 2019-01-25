@@ -1,0 +1,55 @@
+{
+  "engines": {
+    "composer": "^0.20.3"
+  },
+  "name": "clyde-prototype",
+  "version": "0.0.1",
+  "description": "Clyde exploratory sensor network.",
+  "scripts": {
+    "prepublish": "mkdirp ./dist && composer archive create --sourceType dir --sourceName . -a ./dist/clyde-prototype.bna",
+    "pretest": "npm run lint",
+    "lint": "eslint .",
+    "test": "nyc mocha -t 0 test/*.js && cucumber-js"
+  },
+  "keywords": [
+    "composer",
+    "composer-network"
+  ],
+  "author": "Ed Kazmierczak",
+  "email": "ed.kazmierczak@gmail.com",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "chai": "latest",
+    "chai-as-promised": "latest",
+    "composer-admin": "^0.20.5",
+    "composer-cli": "^0.20.4",
+    "composer-client": "^0.20.5",
+    "composer-common": "^0.20.3",
+    "composer-connector-embedded": "^0.20.3",
+    "composer-cucumber-steps": "^0.20.3",
+    "cucumber": "^2.2.0",
+    "eslint": "latest",
+    "mkdirp": "latest",
+    "mocha": "latest",
+    "nyc": "latest"
+  },
+  "dependencies": {
+    "composer": "^4.1.0",
+    "composer-playground": "^0.19.18",
+    "composer-rest-server": "^0.20.4",
+    "date": "^1.0.2",
+    "events": "^3.0.0",
+    "fabric-ca-client": "^1.3.0",
+    "fabric-client": "^1.3.0",
+    "fabric-network": "^1.3.0-snapshot",
+    "grpc": "^1.16.1",
+    "moment": "^2.23.0",
+    "mqtt": "^2.18.8",
+    "os": "^0.1.1",
+    "path": "^0.12.7",
+    "polling-to-event": "^2.1.0",
+    "util": "^0.11.1",
+    "uuid-by-string": "^0.6.0",
+    "yo": "^2.0.5"
+  }
+}

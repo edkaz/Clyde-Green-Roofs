@@ -1,0 +1,14 @@
+// Organisation A
+{
+    "url": "https://ibp-sp.us-south.ibm-blockchain-5-prod.cloud.ibm.com",
+    "network_id": "n1c9b5898e164420da5682972809501b6",
+    "key": "org1",
+    "secret": "kOc5yYJu4RZSKZ7FKxZk3NLkwDmeCfS_mMD_QPWnBPVsF5UaDlWemNtmFmFKtbPP"
+}
+// Organisation B
+{
+    "url": "https://ibp-sp.us-south.ibm-blockchain-5-prod.cloud.ibm.com",
+    "network_id": "n1c9b5898e164420da5682972809501b6",
+    "key": "org2",
+    "secret": "IbrYm16TCcNScFbEqf_EzOkpRfVW8X_KEJHq2BP3uXeMqkn1C3bZZeVpycMGmiOp"
+    }
