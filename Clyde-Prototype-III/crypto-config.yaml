@@ -1,0 +1,45 @@
+#-------------------------------------------------------------------------------
+#  Orderer Organisations
+#  NOTE: We can use multiple orderers *but* at this point of time (Dec. 2018)
+#  the blogs indicate that Hyperledger fabric orderers can only be distributed 
+#  over a local cluster but not over a network. Lets see how far we can push things ... !!
+#
+#-------------------------------------------------------------------------------
+OrdererOrgs:
+  - Name: Clyde
+    Domain: clyde-orderer.com
+    Specs:
+      - Hostname: clyde-consortium
+
+##------------------------------------------------------------------------------
+PeerOrgs:
+  # ---------------------------------------------------------------------------
+  #  The Clyde Hotel
+  # ---------------------------------------------------------------------------
+  - Name: Clyde-Peer
+    EnableNodeOUs: true
+    Domain: clyde.com
+    Specs:
+      - Hostname: clyde-consortium
+    Template:
+      Count: 2
+    Users:
+      Count: 0
+
+  - Name: UoM-Peer
+    Domain: uom.com
+    Specs:
+      - Hostname: clyde-consortium
+    Template:
+      Count: 2
+    Users:
+      Count: 0
+
+  - Name: Penta-Peer
+    Domain: penta.com
+    Specs:
+      - Hostname: clyde-consortium
+    Template:
+      Count: 2
+    Users:
+      Count: 0

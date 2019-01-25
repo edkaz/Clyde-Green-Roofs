@@ -1,0 +1,40 @@
+# -------------------------------------------------------------------------------------
+# Green Proof Peer Configuration Prototype
+# Ed. Kazmierczak - Dec. 2018
+#
+# The aim is to build up the blockchain for the Green Roofs consortium in layers.
+# The 'peer configuration' is using the hyperledger 'first-network' as a guide. 
+# -------------------------------------------------------------------------------------
+
+version: '3'
+
+services:
+  peer-base:
+    # The docker image for the peer. 
+    image: hyperledger/fabric-peer:latest
+
+    # Setting the environment variables for the execution of this peer. NOTE: The environment 
+    # variables are documented at 
+    # https://github.com/hyperledger/fabric/blob/release-1.1/sampleconfig/core.yaml. 
+    # Any of the environment variables can be set by capitalising the name of the file
+    # in which the environment variable is set (core, orderer) and a path to the environment 
+    # variable to be set where the path elements are seperated by a '_'. For example, to set 
+    # variable vm: endpoint: in the core.yaml file set 'CORE_VM_ENDPOINT=...' below. 
+
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_byfn
+      - CORE_LOGGING_LEVEL=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+
+    # Set the working directory for the 'command'.
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+
+    # Start executing the peer
+    command: peer node start

@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  orderer-base:
+    # The docker image for the orderer. 
+    image: hyperledger/fabric-orderer:latest
+
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_LEDGERTYPE=file
+      - ORDERER_GENERAL_KEEPALIVE=30s
+
+    # Set the working directory for the 'command'.
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+
+    # Start executing the orderer
+    command: orderer node run
+
+
+
