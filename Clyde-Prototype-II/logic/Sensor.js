@@ -1,18 +1,17 @@
 'use strict';
 
-/*-----------------------------------------------------------------------------
+/*--------------------------------------------------------------------------------
  * Node.js Interface to the CCP Sensors
  * Ed. Kazmierczak
  * 
- * Modified from Steve Melnikoff Node.js CCP sensor interface used here
- * with the permission of the author. 
+ * Adapted from the original CCP connection code by Steve Melnikoff.
  * @link   URL
  * @file   ccp.js
  * @author Steve Melnikoff.
  * @since  0.1.0
  * @copyright 2018 All rights reserved.
  * 
- */
+ *-------------------------------------------------------------------------------*/
 
 const fs              = require('fs');
 const queryString     = require('qs');
