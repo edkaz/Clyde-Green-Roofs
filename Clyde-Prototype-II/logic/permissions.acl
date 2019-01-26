@@ -1,5 +1,7 @@
 /**
- * Clyde access control list - completely open for the moment.
+ * Clyde access control list - completely open for the moment but we need to
+ * redesign this. In the current design Clyde Hotel is the data owner, and so
+ * is the data writer (via the orderer service). UoM and Penta are data readers.
  */
 rule Default {
     description: "Allow all participants access to all resources"
@@ -18,7 +20,7 @@ rule SystemACL {
 }
 
 rule NetworkAdminUser {
-    description: "Grant business network administrators full access to user resources"
+    description: "Grant administrators access to user resources"
     participant: "org.hyperledger.composer.system.NetworkAdmin"
     operation: ALL
     resource: "**"
@@ -26,7 +28,7 @@ rule NetworkAdminUser {
 }
 
 rule NetworkAdminSystem {
-    description: "Grant business network administrators full access to system resources"
+    description: "Grant administrators full access to system resources"
     participant: "org.hyperledger.composer.system.NetworkAdmin"
     operation: ALL
     resource: "org.hyperledger.composer.system.**"

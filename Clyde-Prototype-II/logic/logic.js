@@ -1,5 +1,20 @@
-/**
- * A temperature reading is recieved from one of the CCP sensors
+/*-----------------------------------------------------------------------
+ * InitialiseReading
+ * Initialises a temperature reading asset.
+ * @param {}
+ * @transaction
+ * ----------------------------------------------------------------------*/
+asynch function InitialiseReading() {
+    let reading = {}
+    reading.ReadingId = "Empty"
+    reading.Readings  = []
+    return assetRegistry.update( reading )
+}
+
+/*------------------------------------------------------------------------
+ * TemperatureReading
+ * A temperature reading is recieved from one of the CCP sensors and
+ * added to the blockchain. 
  * @param {clyde.TemperatureReading} reading - the CCP sensor reading
  * @transaction
  */

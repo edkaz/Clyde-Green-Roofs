@@ -69,7 +69,7 @@ sensor.on(EVENTS.TELEMETRY, function( data ){
   var TagName      = data.TagSerialNumber;
   var TagValue     = data.TagTemperature;
   var SampleDate   = data.TemperatureSampleTime;
-  //var SampleTime   = new Date(SampleDate).getTime();
+  var SampleTime   = new Date(SampleDate).getTime();
   var SampleTime   = ConvertUTC(SampleDate);
   var Telemetry    = {"ts": SampleTime, "values": {"Temperature": TagValue} };
   // Open a connection and upload a single data value

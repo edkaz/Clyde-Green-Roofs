@@ -1,0 +1,25 @@
+{
+  "name": "iota-api-proxy",
+  "version": "0.1.0",
+  "description": "test writing to iota devnet",
+  "main": "sensorNode.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "test",
+    "iota"
+  ],
+  "author": "Steve Melnikoff",
+  "license": "ISC",
+  "dependencies": {
+    "@iota/core": "^1.0.0-beta.5",
+    "chance": "^1.0.16",
+    "iota.lib.js": "^0.5.1",
+    "jsonfile": "^5.0.0",
+    "lokijs": "^1.5.5",
+    "polling-to-event": "^2.1.0",
+    "sjcl": "^1.0.7",
+    "time-limit-promise": "^1.0.4"
+  }
+}

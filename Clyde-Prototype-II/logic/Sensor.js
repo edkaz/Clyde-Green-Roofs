@@ -1,16 +1,17 @@
 'use strict';
 
-/**
- * Summary. (use period)
- *
- * Description. nodejs interface to ccp sensor api
- *
+/*-----------------------------------------------------------------------------
+ * Node.js Interface to the CCP Sensors
+ * Ed. Kazmierczak
+ * 
+ * Modified from Steve Melnikoff Node.js CCP sensor interface used here
+ * with the permission of the author. 
  * @link   URL
  * @file   ccp.js
  * @author Steve Melnikoff.
- * @
  * @since  0.1.0
  * @copyright 2018 All rights reserved.
+ * 
  */
 
 const fs              = require('fs');
@@ -25,7 +26,9 @@ const getUuidByString = require('uuid-by-string');
 const sjcl            = require('sjcl');
 const moment          = require('moment');
 
-/* Defaults for CCP Endpoints */
+/*--------------------------------------------------------------------------------
+ * Default configuration for CCP endpoints.
+ *-------------------------------------------------------------------------------*/
 const defaults = {
     username:         'ed.kazmierczak@gmail.com',
     password:         'Nephr0n!',
@@ -33,7 +36,9 @@ const defaults = {
     dashboardUrl:     'https://clientapi.ccp-network.com/api/Dashboard',
     interval:         null,
     token:            null,
-    uuid:             getUuidByString('gmail.com'), //This is combined with a device id + ts
+    //  The full user uuid is the device 'id' combined with the time stamp and 
+    //  ending in gmail.com.
+    uuid:             getUuidByString('gmail.com'), 
     timestampFormat:  'D/M/YYYY H:mm:ss'
 };
 
@@ -41,6 +46,12 @@ let Events = null;
 let Config = null;
 let sensor = null;
 let poll   = null;
+
+/*---------------------------------------------------------------------------------
+ * Sensor class - Methods for interacting with CCP sensors.
+ * Every 'Sensor' object is also a js eventEmitter and is capable of emitting and
+ * listening for events.
+ * ------------------------------------------------------------------------------*/
 
 class Sensor extends eventEmitter {
 
@@ -58,8 +69,11 @@ class Sensor extends eventEmitter {
     }  // End of Constructor
 
     start() {
-        // Authenticate and connect to the sensors and then start polling.
+        // Start the process by first authenticating and then polling for data. 
+
         const authenticate = async () => {
+            // CCP sensors use 'token based authenatication'. The function connects to the CCP
+            // sensors, validates the user and returns an access token.
             const  local_config =
                         {
                         headers: {  'Content-Type': 'application/x-www-form-urlencoded',
@@ -88,6 +102,7 @@ class Sensor extends eventEmitter {
     } // End of 'start'
 
     polling(interval = timePeriods.FIVEMINUTES) {
+        // Poll the sensors with the specified interval. 
 
         let request = async (done) => {
             // Create a 'Bearer' token
@@ -106,12 +121,15 @@ class Sensor extends eventEmitter {
         }; //End of 'request'
 
         let success = (data) => {
-            // Parameters: 'data' is the data from the polling.
+            // Parameters: 'data' is the data from the sensors for this round.
             // First create a new null 'meta' object and an empty buffer.
             let meta = null;
             let buf = [];
 
-            const generateSeed = (len = 81) => { //generate trytes according to some length
+            const generateSeed = (len = 81) => { 
+                //'generateSeed' is part of the original implementation that connects to 'iota'. 
+                // It generates trytes according to some length and is left here in the event that
+                // we would want to connect to 'iota'.
                 let seed = "";
                 for(;seed.length < 81;seed += sjcl.codec.base64.fromBits(sjcl.random.randomWords(33, 10)).replace(/[^A-Z9]+/g, '')) {};
                 return seed.substring(0,len);
@@ -123,7 +141,7 @@ class Sensor extends eventEmitter {
                 //uuid uniquely identifies this sensor telemetry point, uses ts plus sensor id!
                 if( _.has(d,'TagSerialNumber') === false) { return; } //sanity check
 
-                //last bits before writing to tangle and then to thingsboard
+                //last bits before writing to thingsboard
                 const device     = [d.SiteName, d.LocationName, d.TagSerialNumber].join('-');
                 const tag        = generateSeed(27); //this is an iota tag for one transaction
                 const sampleTime = d.TemperatureSampleTime || moment().format(Config.timestampFormat); //use what the tag reports or now
@@ -146,8 +164,9 @@ class Sensor extends eventEmitter {
                         lat: -37.7128197,
                         lng: 145.1587373
                     });
-                    // TODO need to wrap this up in the appropriate try-catrch.
-                    sensor.emit(Events.TELEMETRY, d); //move data to sensorNode
+                    // Generate a 'TELEMETRY' event to notify listeners that a new sensor value is
+                    // ready.
+                    sensor.emit(Events.TELEMETRY, d); 
                     // buf.push(d);
                 } catch(err) {
                     console.log('ERR inserted -------------------\n', err, JSON.stringify(d));
@@ -211,8 +230,9 @@ class Sensor extends eventEmitter {
         poll.resume();
     }
 
-    //Testing
-
+/*------------------------------------------------------------------------------
+ * Axios testing
+ *-----------------------------------------------------------------------------*/
     axiosTest() {
     // GET request for remote image
             axios({
