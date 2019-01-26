@@ -14,7 +14,9 @@ asset SensorReadings identified by ReadingId {
   o SensorData[] Readings
 }
 
-transaction Initialise
+transaction InitialiseReading {
+  --> SensorReadings SR 
+}
 
 transaction TemperatureReading {
   o SensorData SD
