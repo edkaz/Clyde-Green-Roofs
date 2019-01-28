@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 
 services:
   orderer-base:
@@ -18,7 +18,7 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
 
     # Start executing the orderer
-    command: orderer node run
+    command: orderer
 
 
 
