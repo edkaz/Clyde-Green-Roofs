@@ -11,7 +11,7 @@ Organizations:
         #-----------------------------------------------------------------------
         Name:           Clyde
         ID:             Clyde-MSP
-        MSPDir:         /Users/ed/Dropbox/Development/Blockchains/Hyperledger/Clyde-Prototype-III/crypto-config/peerOrganizations/clyde.com/msp
+        MSPDir:         '/Users/ed/Dropbox/Development/Blockchains/Hyperledger/Clyde Green Roof/Clyde-Prototype-III/crypto-config/peerOrganizations/clyde.com/msp'
         AdminPrincipal: Role.ADMIN
         # AnchorPeers defines the location of peers which can be used for
         # cross-org gossip communication. Note, this value is only encoded in
@@ -26,7 +26,7 @@ Organizations:
         #-----------------------------------------------------------------------
         Name:           UOM
         ID:             UOM-MSP
-        MSPDir:         /Users/ed/Dropbox/Development/Blockchains/Hyperledger/Clyde-Prototype-III/crypto-config/peerOrganizations/uom.com/msp
+        MSPDir:         '/Users/ed/Dropbox/Development/Blockchains/Hyperledger/Clyde Green Roof/Clyde-Prototype-III/crypto-config/peerOrganizations/uom.com/msp'
         AdminPrincipal: Role.MEMBER
         AnchorPeers:
             - Host:     127.0.0.1
@@ -38,7 +38,7 @@ Organizations:
         #-----------------------------------------------------------------------
         Name:           Penta
         ID:             Penta-MSP
-        MSPDir:         /Users/ed/Dropbox/Development/Blockchains/Hyperledger/Clyde-Prototype-III/crypto-config/peerOrganizations/penta.com/msp
+        MSPDir:         '/Users/ed/Dropbox/Development/Blockchains/Hyperledger/Clyde Green Roof/Clyde-Prototype-III/crypto-config/peerOrganizations/penta.com/msp'
         AdminPrincipal: Role.MEMBER
         AnchorPeers:
             - Host:     127.0.0.1

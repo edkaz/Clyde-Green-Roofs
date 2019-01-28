@@ -7,7 +7,7 @@
 #-------------------------------------------------------------------------------
 OrdererOrgs:
   - Name: Clyde
-    Domain: clyde-orderer.com
+    Domain: clyde.com
     Specs:
       - Hostname: clyde-consortium
 
@@ -22,7 +22,7 @@ PeerOrgs:
     Specs:
       - Hostname: clyde-consortium
     Template:
-      Count: 2
+      Count: 3
     Users:
       Count: 0
 
@@ -31,7 +31,7 @@ PeerOrgs:
     Specs:
       - Hostname: clyde-consortium
     Template:
-      Count: 2
+      Count: 3
     Users:
       Count: 0
 
@@ -40,6 +40,6 @@ PeerOrgs:
     Specs:
       - Hostname: clyde-consortium
     Template:
-      Count: 2
+      Count: 3
     Users:
       Count: 0
