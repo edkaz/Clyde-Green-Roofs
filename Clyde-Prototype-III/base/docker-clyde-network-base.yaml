@@ -1,3 +1,216 @@
-version: '3'
+version: '2'
 
 services: 
+  clyde-consortium.clyde.com:
+    container_name: clyde-consortium.clyde.com
+    extends:
+      file: orderer-base.yaml
+      service: orderer-base
+    environment:
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    volumes:
+    # First map the generated 'genesis block' to the container local space.
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    # Next map the orderer MSP and TLS pems to the container local orderer space. 
+    - ../crypto-config/ordererOrganizations/clyde.com/orderers/clyde-consortium.clyde.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/clyde.com/orderers/clyde-consortium.clyde.com/tls:/var/hyperledger/orderer/tls
+    # Backups and restart
+    # - clyde-consortium.clyde.com:/var/hyperledger/production/orderer
+    ports:
+      - 7050:7050
+
+##----------- Clyde Hotel Peers ---------------------------------------------------------------------
+##  The pattern for setting environment variables, communication endpoints and goosip initialisations
+##  repeats for all the peers. 
+## 
+##  Port: peer0:7051, peer1: 7061, peer2: 7071
+
+  peer0.clyde.com:
+    container_name: peer0.clyde.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.clyde.com
+      - CORE_PEER_ADDRESS=peer0.clyde.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[ peer1.clyde.com:7061, peer2.clyde.com:7071]
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.clyde.com:7051
+      - CORE_PEER_LOCALMSPID=Clyde-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/clyde.com/peers/peer0.clyde.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/clyde.com/peers/peer0.clyde.com/tls:/etc/hyperledger/fabric/tls
+        # - peer0.clyde.com:/var/hyperledger/production
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer1.clyde.com:
+    container_name: peer1.clyde.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.clyde.com
+      - CORE_PEER_ADDRESS=peer1.clyde.com:7061
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.clyde.com:7061
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[peer0.clyde.com:7051, peer2.clyde.com:7071]
+      - CORE_PEER_LOCALMSPID=Clyde-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/clyde.com/peers/peer1.clyde.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/clyde.com/peers/peer1.clyde.com/tls:/etc/hyperledger/fabric/tls
+        # - peer1.clyde.com:/var/hyperledger/production
+    ports:
+      - 7061:7061
+      - 7063:7063
+
+  peer2.clyde.com:
+    container_name: peer2.clyde.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer2.clyde.com
+      - CORE_PEER_ADDRESS=peer2.clyde.com:7071
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.clyde.com:7071
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[peer0.clyde.com:7051, peer1.clyde.com:7061]
+      - CORE_PEER_LOCALMSPID=Clyde-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/clyde.com/peers/peer2.clyde.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/clyde.com/peers/peer2.clyde.com/tls:/etc/hyperledger/fabric/tls
+        # - peer2.clyde.com:/var/hyperledger/production
+    ports:
+      - 7071:7071
+      - 7073:7073
+
+##----------- University of Melbourne Peers ---------------------------------------------------------------------
+##  Port: peer0:8051, peer1: 8061, peer2: 8071
+
+  peer0.uom.com:
+    container_name: peer0.uom.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.uom.com
+      - CORE_PEER_ADDRESS=peer0.uom.com:8051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[ peer1.uom.com:8061, peer2.uom.com:8071]
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.uom.com:8051
+      - CORE_PEER_LOCALMSPID=UOM-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/uom.com/peers/peer0.uom.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/uom.com/peers/peer0.uom.com/tls:/etc/hyperledger/fabric/tls
+        # - peer0.uom.com:/var/hyperledger/production
+    ports:
+      - 8051:8051
+      - 8053:8053
+
+  peer1.uom.com:
+    container_name: peer1.uom.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.uom.com
+      - CORE_PEER_ADDRESS=peer1.uom.com:8061
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.uom.com:8061
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[peer0.uom.com:8051, peer2.uom.com:8071]
+      - CORE_PEER_LOCALMSPID=UOM-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/uom.com/peers/peer1.uom.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/uom.com/peers/peer1.uom.com/tls:/etc/hyperledger/fabric/tls
+        # - peer1.uom.com:/var/hyperledger/production
+    ports:
+      - 8061:8061
+      - 8063:8063
+
+  peer2.uom.com:
+    container_name: peer2.uom.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer2.uom.com
+      - CORE_PEER_ADDRESS=peer2.uom.com:8071
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.uom.com:8071
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[peer0.uom.com:8051, peer1.uom.com:8061 ]
+      - CORE_PEER_LOCALMSPID=UOM-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/uom.com/peers/peer2.uom.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/uom.com/peers/peer2.uom.com/tls:/etc/hyperledger/fabric/tls
+        # - peer2.uom.com:/var/hyperledger/production
+    ports:
+      - 8071:8071
+      - 8073:8073
+
+##----------- Penta Peers ---------------------------------------------------------------------------------------
+##  Port: peer0:9051, peer1: 9061, peer2: 9071
+
+  peer0.penta.com:
+    container_name: peer0.penta.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.penta.com
+      - CORE_PEER_ADDRESS=peer0.penta.com:9051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[ peer1.penta.com:9061, peer2.penta.com:9071 ]
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.penta.com:9051
+      - CORE_PEER_LOCALMSPID=Penta-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/penta.com/peers/peer0.penta.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/penta.com/peers/peer0.penta.com/tls:/etc/hyperledger/fabric/tls
+        # - peer0.penta.com:/var/hyperledger/production
+    ports:
+      - 9051:9051
+      - 9053:9053
+
+  peer1.penta.com:
+    container_name: peer1.penta.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.penta.com
+      - CORE_PEER_ADDRESS=peer1.penta.com:9061
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.penta.com:9061
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[peer0.penta.com:9051, peer2.penta.com:9071]
+      - CORE_PEER_LOCALMSPID=Penta-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/penta.com/peers/peer1.penta.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/penta.com/peers/peer1.penta.com/tls:/etc/hyperledger/fabric/tls
+        # - peer1.penta.com:/var/hyperledger/production
+    ports:
+      - 9061:9061
+      - 9063:9063
+
+  peer2.penta.com:
+    container_name: peer2.penta.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer2.penta.com
+      - CORE_PEER_ADDRESS=peer2.penta.com:9071
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.penta.com:9071
+      - CORE_PEER_GOSSIP_BOOTSTRAP=[peer0.penta.com:9051, peer1.penta.com:9061]
+      - CORE_PEER_LOCALMSPID=Penta-MSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/penta.com/peers/peer2.penta.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/penta.com/peers/peer2.penta.com/tls:/etc/hyperledger/fabric/tls
+        # - peer2.penta.com:/var/hyperledger/production
+    ports:
+      - 9071:9071
+      - 9073:9073
