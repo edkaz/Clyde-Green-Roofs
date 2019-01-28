@@ -6,7 +6,7 @@
 # The 'peer configuration' is using the hyperledger 'first-network' as a guide. 
 # -------------------------------------------------------------------------------------
 
-version: '3'
+version: '2'
 
 services:
   peer-base:
