@@ -72,7 +72,8 @@ sensor.on(EVENTS.TELEMETRY, function( data ){
   var SampleTime   = new Date(SampleDate).getTime();
   var SampleTime   = ConvertUTC(SampleDate);
   var Telemetry    = {"ts": SampleTime, "values": {"Temperature": TagValue} };
-  // Open a connection and upload a single data value
+  // Open a connection to Thingsboard and upload a single data value on a 
+  // 'TELEMETRY' event.
   var client = mqtt.connect('mqtt://'+ HostName,{
       username: tokens[TagName]
   });
